@@ -1,12 +1,12 @@
 # README #
 
----
+- - -
 **NOTE:** This is an import of an old Bitbucket project that was alive back
 when Bitbucket supported Mercurial. It is from 2014-2015, and hence does not
 consider newer additions to the C++ language. I have reimported it without
 history. Since the history really didn't contain that many commits. The old
 Mercurial repository can be found [in the Bitbucket archive](https://bitbucket-archive.softwareheritage.org/projects/to/tommyandersen/templated-c-string-format.html).
----
+- - -
 
 Personally I was a bit surprised when the variadic templates were introduced
 with C++ 11, that the string formatting methods were kept, in the old
