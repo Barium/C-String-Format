@@ -268,7 +268,7 @@ public:
  */
 struct FormatDynamicDecimal
 {
-    static constexpr const long double precision = std::sqrt(std::numeric_limits<double>::epsilon());
+    const long double precision;
     const long double value;
     const std::streamsize scientificLimit = 5;
     const std::streamsize scientificCeil;
@@ -276,7 +276,8 @@ struct FormatDynamicDecimal
     const std::streamsize minPrecision;
 
     FormatDynamicDecimal(long double value, std::streamsize minPrecision, std::streamsize maxPrecision, std::streamsize scientificCeil)
-        : value(value), minPrecision(minPrecision), maxPrecision(maxPrecision), scientificCeil(scientificCeil)
+        : value(value), minPrecision(minPrecision), maxPrecision(maxPrecision), scientificCeil(scientificCeil), 
+          precision(std::sqrt(std::numeric_limits<double>::epsilon()))
     {
     }
 
@@ -293,7 +294,7 @@ struct FormatDynamicDecimal
         bool aboveScientificCeil = false;
         // The absolute integer version of the number, we use the abs value to avoid having to deal with the sign
         // character.
-        uint64_t intVersion = static_cast<uint64_t>(std::abs(rhs.value));
+        unsigned long long intVersion = static_cast<unsigned long long>(std::abs(rhs.value));
         // By default we use fixed notation and control the number of digits to write, based on our calculations.
         std::ios_base::fmtflags newFlags = std::ios_base::fixed;
 
@@ -332,10 +333,10 @@ struct FormatDynamicDecimal
             // processed all digits. We check the value against our precision which is a small enough value that it
             // should be capable of detecting when we have reached the last digit.
             long double f = std::abs(rhs.value - std::trunc(rhs.value));
-            while (precision < f) {
+            while (rhs.precision < f) {
                 // Multiply by 10 so we can extract the actual digit.
                 f *= 10;
-                if (inLeadingZeroes && std::trunc(f) < precision) {
+                if (inLeadingZeroes && std::trunc(f) < rhs.precision) {
                     ++leadingZeroes;
                 }
                 else {
@@ -1406,7 +1407,7 @@ void PostprocessStreamForDecimal(std::string&& writtenString, const BasicFormatS
  * @param[out]    useValue  A boolean value of true or false, specifying whether to write the value or not, if this is
  *                set to false, the value should not be written by the caller, because it is already written.
  */
-void PreprocessStreamForInteger(const BasicFormatSpecifiers& specifiers, std::ostream& ostr, int64_t& value,
+void PreprocessStreamForInteger(const BasicFormatSpecifiers& specifiers, std::ostream& ostr, long long& value,
         bool& useValue)
 {
     // By default use the value.
@@ -1545,7 +1546,7 @@ void PreprocessStreamForInteger(const BasicFormatSpecifiers& specifiers, std::os
  * @param[in] value  The value that should be formatted and output.
  */
 void PostprocessStreamForInteger(std::string&& writtenString, const BasicFormatSpecifiers& specifiers,
-        std::ostream& ostr, const int64_t& value)
+        std::ostream& ostr, const long long& value)
 {
     int contentWidth = static_cast<int>(writtenString.size());
     bool addPadding = (specifiers.sign == FORMAT_SIGN_POSITIVE_SPACE_TOGGLE || specifiers.align == FORMAT_ALIGN_CENTER);
@@ -1912,7 +1913,7 @@ void ConvertToBasicFormatSpecifiers(const char* formatParameter, BasicFormatSpec
  */
 void FormatType(short value, const char* formatSpecifier, std::ostream& output)
 {
-    FormatType(static_cast<int64_t>(value), formatSpecifier, output);
+    FormatType(static_cast<long long>(value), formatSpecifier, output);
 }
 
 
@@ -1932,7 +1933,7 @@ void FormatType(short value, const char* formatSpecifier, std::ostream& output)
  */
 void FormatType(int value, const char* formatSpecifier, std::ostream& output)
 {
-    FormatType(static_cast<int64_t>(value), formatSpecifier, output);
+    FormatType(static_cast<long long>(value), formatSpecifier, output);
 }
 
 
@@ -1950,7 +1951,7 @@ void FormatType(int value, const char* formatSpecifier, std::ostream& output)
  * @param formatSpecifier[in]  The format specifier to use.
  * @param output[out]  A reference to an output stream to write the formatted result to.
  */
-void FormatType(int64_t value, const char* formatSpecifier, std::ostream& output)
+void FormatType(long long value, const char* formatSpecifier, std::ostream& output)
 {
     int pos = 0;
     BasicFormatSpecifiers specifiers;
@@ -1983,7 +1984,7 @@ void FormatType(int64_t value, const char* formatSpecifier, std::ostream& output
  */
 void FormatType(bool value, const char* formatSpecifier, std::ostream& output)
 {
-    FormatType(static_cast<int64_t>(value), formatSpecifier, output);
+    FormatType(static_cast<long long>(value), formatSpecifier, output);
 }
 
 
@@ -2135,7 +2136,7 @@ void FormatType(const char* value, const char* formatSpecifier, std::ostream& ou
  */
 bool ConvertAndFormatType(short value, FormatFragment& fragment, std::ostream& output)
 {
-    return ConvertAndFormatType(static_cast<int64_t>(value), fragment, output);
+    return ConvertAndFormatType(static_cast<long long>(value), fragment, output);
 }
 
 
@@ -2154,7 +2155,7 @@ bool ConvertAndFormatType(short value, FormatFragment& fragment, std::ostream& o
  */
 bool ConvertAndFormatType(int value, FormatFragment& fragment, std::ostream& output)
 {
-    return ConvertAndFormatType(static_cast<int64_t>(value), fragment, output);
+    return ConvertAndFormatType(static_cast<long long>(value), fragment, output);
 }
 
 
@@ -2171,7 +2172,7 @@ bool ConvertAndFormatType(int value, FormatFragment& fragment, std::ostream& out
  * @return Returns true if the type was converted and formatted, otherwise false is returned, meaning formatting is
  *         required elsewhere.
  */
-bool ConvertAndFormatType(int64_t value, FormatFragment& fragment, std::ostream& output)
+bool ConvertAndFormatType(long long value, FormatFragment& fragment, std::ostream& output)
 {
     if (!fragment.selectors.empty()) {
         std::string selector = fragment.selectors.front();
@@ -2277,7 +2278,7 @@ bool ConvertAndFormatType(long double value, FormatFragment& fragment, std::ostr
             break;
 
         case 'i':
-            FormatType(static_cast<int64_t>(value), fragment.formatSpecifier, output);
+            FormatType(static_cast<long long>(value), fragment.formatSpecifier, output);
             break;
 
         default:

@@ -525,7 +525,7 @@ void FormatType(int value, const char* formatSpecifier, std::ostream& output);
  * @param formatSpecifier[in]  The format specifier to use.
  * @param output[out]  A reference to an output stream to write the formatted result to.
  */
-void FormatType(int64_t value, const char* formatSpecifier, std::ostream& output);
+void FormatType(long long value, const char* formatSpecifier, std::ostream& output);
 
 /**
  * Formatting function for the primitive type float, this will be called by the format function and can be called as
@@ -658,7 +658,7 @@ std::string FormatType(T&& value, const char* formatSpecifier)
 
 bool ConvertAndFormatType(short value, FormatFragment& fragment, std::ostream& output);
 bool ConvertAndFormatType(int value, FormatFragment& fragment, std::ostream& output);
-bool ConvertAndFormatType(int64_t value, FormatFragment& fragment, std::ostream& output);
+bool ConvertAndFormatType(long long value, FormatFragment& fragment, std::ostream& output);
 bool ConvertAndFormatType(float value, FormatFragment& fragment, std::ostream& output);
 bool ConvertAndFormatType(double value, FormatFragment& fragment, std::ostream& output);
 bool ConvertAndFormatType(long double value, FormatFragment& fragment, std::ostream& output);
