@@ -69,16 +69,18 @@ written a really simple example, that shows the basic use of the formatting
 methods (of course you can always take a look at the `test.cpp` file, where I
 have included more samples).
 
-    #include <iostream>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        cout << Format("Hello {}", "World") << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    cout << Format("Hello {}", "World") << endl;
+    return 0;
+}
+```
 
 The above code example will result in the following line being written to
 STDOUT:
@@ -173,16 +175,18 @@ instead the type of the parameter is deduced from the type of the argument. In
 other words you no longer accidentally type `"%d"` when you really wish to
 insert a string.
 
-    #include <iostream>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        cout << Format("{} {}", "Hello", "World") << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    cout << Format("{} {}", "Hello", "World") << endl;
+    return 0;
+}
+```
 
 Outputs:
 
@@ -197,16 +201,18 @@ with index 1, etc.
 Unlike the regular format string method, it is possible to reference
 parameters in any order you wish, as can be seen in the example below:
 
-    #include <iostream>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        cout << Format("Countdown from 5: {4}, {3}, {2}, {1}, {0}", 1, 2L, "3", 4, 5) << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    cout << Format("Countdown from 5: {4}, {3}, {2}, {1}, {0}", 1, 2L, "3", 4, 5) << endl;
+    return 0;
+}
+```
 
 Outputs:
 
@@ -226,16 +232,18 @@ specified.  In this case the field not having a set index, will refer to the
 index number following the previous field, even if that parameter has been
 referenced before.
 
-    #include <iostream>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        cout << Format("March: {} {}, {0} {}, {0} {}", "left", "right") << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    cout << Format("March: {} {}, {0} {}, {0} {}", "left", "right") << endl;
+    return 0;
+}
+```
 
 Outputs:
 
@@ -253,16 +261,18 @@ Formatting specifiers are positioned inside the `{` and `}` just like (but
 following) the parameter index. To output a number with a specific precision
 set the desired precision as such:
 
-    #include <iostream>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        cout << Format("{0:.0}, {0:.1}, {0:.2}, {0:.3}, {0:.4}", 2.7182818284590452353603L) << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    cout << Format("{0:.0}, {0:.1}, {0:.2}, {0:.3}, {0:.4}", 2.7182818284590452353603L) << endl;
+    return 0;
+}
+```
 
 Outputs:
 
@@ -275,18 +285,20 @@ objects can be output, and even vectors and maps are supported.  The syntax
 allows to reference specific elements in the vector or map, using either the
 object notation (`.`) or the array notation (`[]`), the result is the same.
 
-    #include <iostream>
-    #include <map>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <map>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        map<string, string> testMap = {{"key1", "value1"}, {"key2", "value2"}, {"key3", "value3"}};
-        cout << Format("{0.key1}, {0[key3]}", testMap) << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    map<string, string> testMap = {{"key1", "value1"}, {"key2", "value2"}, {"key3", "value3"}};
+    cout << Format("{0.key1}, {0[key3]}", testMap) << endl;
+    return 0;
+}
+```
 
 Outputs:
 
@@ -294,18 +306,20 @@ Outputs:
 
 As mentioned previously vector like classes can also be used:
 
-    #include <iostream>
-    #include <vector>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <vector>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        vector<int> testVec = {1, 2, 3, 4, 5};
-        cout << Format("{0.0}, {0[2]}, {0.4}", testVec) << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    vector<int> testVec = {1, 2, 3, 4, 5};
+    cout << Format("{0.0}, {0[2]}, {0.4}", testVec) << endl;
+    return 0;
+}
+```
 
 Outputs:
 
@@ -370,16 +384,18 @@ value is less than zero.
 These special functions can be called multiple times, and are called just like
 a selector for a map:
 
-    #include <iostream>
-    #include <utils/format.h>
+```c++
+#include <iostream>
+#include <utils/format.h>
 
-    using namespace std;
-    using namespace utils::str;
+using namespace std;
+using namespace utils::str;
 
-    int main(int argc, char* argv[]) {
-        cout << Format("{0.inc.inc.sqrt}", 7) << endl;
-        return 0;
-    }
+int main(int argc, char* argv[]) {
+    cout << Format("{0.inc.inc.sqrt}", 7) << endl;
+    return 0;
+}
+```
 
 Outputs:
 
