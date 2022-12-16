@@ -15,3 +15,10 @@ add_library(utils STATIC ${LIB_SOURCE_FILES})
 
 add_executable(string-format ${SAMPLE_SOURCE_FILES})
 target_link_libraries(string-format utils)
+
+# enable testing functionality
+enable_testing()
+
+# define tests
+add_test(NAME string-format
+  COMMAND $<TARGET_FILE:string-format>)
